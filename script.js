@@ -563,23 +563,17 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Por favor, responde todas las preguntas antes de enviar.');
         } else {
             console.log(respuestas);
-            calcular_mbti_e_i(respuestas);
+            calcularMBTI(respuestas);
             alert('Respuestas enviadas. Ver la consola para detalles.');
         }
     });
-    
-    function calcular_mbti_e_i(respuestas) {
-  // calcular e o i
+
+    function esAMayorOIgualB(respuestas, preguntas) {
         let contadorA = 0;
         let contadorB = 0;
-        const array = new Array(4);
-
-
-        // Preguntas específicas para E/I
-        const preguntasEI = [0, 7, 14, 21, 28, 35, 42, 49, 56, 63];
-
+       
         // Contar las respuestas 'a' y 'b' solo para las preguntas específicas
-        preguntasEI.forEach(index => {
+        preguntas.forEach(index => {
             const pregunta = `pregunta${index}`;
             if (respuestas.hasOwnProperty(pregunta)) {
                 if (respuestas[pregunta] === 'a') {
@@ -590,19 +584,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        return contadorA>=contadorB;
+    }
+    
+    function calcularMBTI(respuestas){
 
+        const MBTI = new Array(4);
 
-        if (contadorA>=contadorB) {
-            array[0] = "e"
+        let preguntas = [0, 7, 14, 21, 28, 35, 42, 49, 56, 63];
+
+        //calcular E o I
+        if (esAMayorOIgualB(respuestas,preguntas)) {
+            MBTI[0] = 'E';
         }else{
-            array[0] = "i"
+            MBTI[0] = 'I';
         }
 
-        console.log("las a son: " + contadorA, "las b son:"+ contadorB);
-        console.log(array[0]);
+          //calcular S o N
+        preguntas = [1,8,15,22,29,36,43,50,57,64,2,9,16,23,30,37,44,51,58,65]; 
 
-  // fin de calcular e o i
+        if (esAMayorOIgualB(respuestas,preguntas)) {
+            MBTI[1] = 'S';
+        } else {
+            MBTI[1] = 'N';     
+        }
+
+          //calcular T o F
+        preguntas = [3,10,17,24,31,38,45,52,59,66,4,11,18,25,32,39,46,53,60,67]; 
+
+        if (esAMayorOIgualB(respuestas,preguntas)) {
+            MBTI[2] = 'T';
+        } else {
+            MBTI[2] = 'F';     
+        }
+
+          //calcular J o P
+          preguntas = [5,12,19,26,33,40,47,54,61,68,6,13,20,27,34,41,48,55,62,69]; 
+
+          if (esAMayorOIgualB(respuestas,preguntas)) {
+              MBTI[3] = 'J';
+          } else {
+              MBTI[3] = 'P';     
+          }
+
+        console.log(MBTI);
+
     }
+
 });
 
 
